@@ -1,0 +1,45 @@
+setwd('G:\\4.叶\\12.imeta\\回复质疑\\v2-08-05\\分析\\给编辑部\\4.流式图')
+rm(list = ls())
+library(ggprism)
+library(ggsci)
+library(ggpubr)
+library(ggplot2)
+
+dat=read.csv('CT26-IFNG.csv')
+mycolors <-ggsci::pal_d3("category20")(4)
+dat$group=factor(dat$group,levels = unique(dat$group))
+p1 = ggplot(data = dat,   
+            aes(x = factor(group), y = exp, fill = group)) +  
+  stat_summary(fun = "mean",  
+               geom = "bar",  
+               width = 0.6,
+               fill='white',
+               colour = mycolors,  
+               size = 0.9) +  
+  geom_jitter(size = 3, 
+              aes(colour = group, shape = group),  
+              fill = "white",  
+              stroke = 1,  
+              width = 0.2) +  
+  scale_shape_manual(values = rep(21, length(unique(dat$group)))) +  
+  scale_y_continuous(limits = c(0, 50), expand = c(0, 0)) +  
+  stat_summary(fun = "mean",  
+               fun.max = function(x) mean(x) + sd(x),  
+               fun.min = function(x) mean(x) - sd(x),  
+               geom = "errorbar",
+               color=mycolors,
+               width = 0.4,  
+               size = 0.9) +  
+  theme_prism(axis_text_angle = 45) +  
+  theme(legend.position = '',
+        axis.title.y = element_text(size = 13),  
+        axis.text.y  = element_text(size = 11.5),
+        axis.text.x = element_blank(),
+        axis.ticks.x = element_blank()) +  
+  scale_fill_manual(values = mycolors) +  
+  scale_color_manual(values = mycolors) +  
+  labs(x = element_blank(), y = "IFNG+CD8+T cells(%)", title = '') 
+p1  
+
+ggsave(plot = p1,filename = 'CT26_IFNG.pdf',width = 2.6,height = 3.5)
+
