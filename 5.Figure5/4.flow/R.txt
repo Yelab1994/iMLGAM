@@ -1,4 +1,4 @@
-setwd('G:\\4.叶\\12.imeta\\回复质疑\\v2-08-05\\分析\\给编辑部\\4.流式图')
+
 rm(list = ls())
 library(ggprism)
 library(ggsci)
